@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filtre Leads Transversaux — DAP</title>
+    <title>Filtre Leads — Outils DAP</title>
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAOklEQVQ4T2P8z8Dwn4EIwMjIyECUAQyjBoyGAQMDAwNRYTBqwGgYEBUGo54YDQOiwmA0DEbDAAAyVBAR5dURfwAAAABJRU5ErkJggg==">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -77,12 +78,61 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             border: 1px solid var(--border);
             margin-bottom: 1rem;
-            animation: fadeIn 0.4s ease;
+            animation: slideUp 0.5s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scaleX(1); }
+            50% { opacity: 0.6; transform: scaleX(1.1); }
+        }
+
+        @keyframes celebrateParticle1 {
+            0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+            100% { opacity: 0; transform: translate(-30px, -80px) rotate(-180deg); }
+        }
+        @keyframes celebrateParticle2 {
+            0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+            100% { opacity: 0; transform: translate(30px, -90px) rotate(180deg); }
+        }
+        @keyframes celebrateParticle3 {
+            0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+            100% { opacity: 0; transform: translate(-50px, -60px) rotate(-120deg); }
+        }
+        @keyframes celebrateParticle4 {
+            0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+            100% { opacity: 0; transform: translate(50px, -70px) rotate(120deg); }
+        }
+
+        .celebrate {
+            position: relative;
+        }
+        .celebrate::before,
+        .celebrate::after {
+            content: '';
+            position: absolute;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            top: 50%; left: 50%;
+        }
+        .celebrate::before {
+            background: var(--accent);
+            animation: celebrateParticle1 1s ease-out forwards, celebrateParticle3 1.2s ease-out 0.1s forwards;
+            box-shadow: 20px 0 0 var(--success), -10px 5px 0 var(--info), 15px -10px 0 var(--warning);
+        }
+        .celebrate::after {
+            background: var(--primary-light);
+            animation: celebrateParticle2 1.1s ease-out forwards, celebrateParticle4 1s ease-out 0.15s forwards;
+            box-shadow: -20px 0 0 var(--danger), 10px 5px 0 #ed8936, -15px -10px 0 #9f7aea;
         }
 
         .step-card.hidden { display: none; }
@@ -106,11 +156,11 @@
             padding: 0.8rem 1.2rem;
             border: 2px solid var(--border); border-radius: 10px;
             background: white; cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             text-align: left; font-family: inherit; font-size: 0.92rem; color: var(--text);
         }
 
-        .option-btn:hover { border-color: var(--primary-light); background: #f0f5ff; }
+        .option-btn:hover { border-color: var(--primary-light); background: #f0f5ff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .option-btn.selected { border-color: var(--primary); background: #ebf4ff; }
 
         .option-icon { font-size: 1.3rem; flex-shrink: 0; }
@@ -129,17 +179,19 @@
         .result-card.hidden { display: none; }
 
         .result-transversal {
-            background: linear-gradient(135deg, #ebf4ff 0%, #e9d8fd 100%);
+            background: linear-gradient(135deg, #ebf4ff 0%, #f0f0ff 50%, #e9d8fd 100%);
             border: 2px solid var(--primary-light);
+            border-left: 5px solid var(--accent);
         }
 
         .result-autonome {
-            background: linear-gradient(135deg, #f0fff4 0%, #fefcbf 100%);
+            background: linear-gradient(135deg, #f0fff4 0%, #f7fff9 50%, #fefcbf 100%);
             border: 2px solid var(--success);
+            border-left: 5px solid var(--success);
         }
 
         .result-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
-        .result-icon { font-size: 2rem; }
+        .result-icon { font-size: 3rem; }
         .result-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
 
         .result-body { font-size: 0.93rem; color: var(--text); }
@@ -157,6 +209,50 @@
         }
 
         .result-body .contact-box strong { color: var(--primary); }
+
+        /* Accordion styles for tips-box and contact-box */
+        details.tips-box,
+        details.contact-box {
+            cursor: default;
+        }
+
+        details.tips-box summary,
+        details.contact-box summary {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.2rem 0;
+            user-select: none;
+        }
+
+        details.tips-box summary::-webkit-details-marker,
+        details.contact-box summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.tips-box summary::after,
+        details.contact-box summary::after {
+            content: '\25B6';
+            font-size: 0.7rem;
+            transition: transform 0.3s ease;
+            color: var(--text-light);
+        }
+
+        details[open].tips-box summary::after,
+        details[open].contact-box summary::after {
+            transform: rotate(90deg);
+        }
+
+        details.tips-box ul,
+        details.contact-box ul,
+        details.contact-box p {
+            margin-top: 0.5rem;
+        }
 
         /* Transmission form */
         .transmission-form {
@@ -228,13 +324,18 @@
         .contact-badge .email { color: var(--text-light); font-size: 0.82rem; }
 
         /* File upload zone */
+        @keyframes dashMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 0; }
+        }
+
         .upload-zone {
             border: 2px dashed var(--border);
             border-radius: 10px;
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             background: #fafbfc;
             position: relative;
         }
@@ -243,6 +344,15 @@
         .upload-zone.drag-over {
             border-color: var(--primary-light);
             background: #f0f5ff;
+            border-style: dashed;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                rgba(43,108,176,0.03) 10px,
+                rgba(43,108,176,0.03) 20px
+            );
+            animation: dashMove 1s linear infinite;
         }
 
         .upload-zone input[type="file"] {
@@ -253,7 +363,7 @@
             cursor: pointer;
         }
 
-        .upload-zone .upload-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+        .upload-zone .upload-icon { font-size: 3rem; margin-bottom: 0.3rem; }
         .upload-zone .upload-text { font-size: 0.9rem; color: var(--text-light); }
         .upload-zone .upload-hint { font-size: 0.78rem; color: var(--text-light); margin-top: 0.2rem; }
 
@@ -316,7 +426,7 @@
             gap: 0.5rem;
         }
 
-        .btn-send:hover { background: var(--primary-light); }
+        .btn-send:hover { background: var(--primary-light); transform: scale(1.02); }
         .btn-send:disabled { background: var(--border); cursor: not-allowed; }
 
         .btn-send.sending {
@@ -360,10 +470,10 @@
 
         .progress-dot {
             height: 4px; flex: 1; border-radius: 2px;
-            background: var(--border); transition: background 0.3s;
+            background: var(--border); transition: all 0.4s ease;
         }
 
-        .progress-dot.active { background: var(--primary); }
+        .progress-dot.active { background: var(--primary); animation: pulse 1.5s ease-in-out infinite; }
         .progress-dot.done { background: var(--success); }
 
         .summary { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
@@ -501,17 +611,127 @@
 
         .escalade-note span { flex-shrink: 0; }
 
+        /* Form visual stepper */
+        .form-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 0.8rem 0;
+            position: relative;
+        }
+
+        .form-stepper::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .stepper-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .stepper-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .stepper-label {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            font-weight: 600;
+            text-align: center;
+            max-width: 80px;
+        }
+
+        /* Preview summary */
+        .preview-summary {
+            background: #ebf8ff;
+            border: 1px solid #bee3f8;
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            font-size: 0.88rem;
+            color: var(--text);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .preview-summary h4 {
+            font-size: 0.92rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .preview-summary .preview-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.2rem 0;
+            border-bottom: 1px dotted var(--border);
+        }
+
+        .preview-summary .preview-row:last-child { border-bottom: none; }
+        .preview-summary .preview-label { color: var(--text-light); font-size: 0.82rem; }
+        .preview-summary .preview-value { font-weight: 600; font-size: 0.85rem; }
+
+        /* DAP Badge */
+        .dap-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.15rem 0.7rem;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.78rem;
+            color: var(--text-light);
+        }
+
         @media (max-width: 600px) {
             .step-card { padding: 1.2rem; }
             .result-card { padding: 1.2rem; }
             .form-row { grid-template-columns: 1fr; }
             .transmission-form { padding: 1rem; }
+            .stepper-label { font-size: 0.6rem; max-width: 60px; }
+            .stepper-circle { width: 24px; height: 24px; font-size: 0.65rem; }
         }
     </style>
 </head>
 <body>
 
 <div class="header">
+    <span class="dap-badge">OUTILS DAP</span>
     <h1>Filtre <span>Leads</span> Transversaux</h1>
     <p>Avant de transférer un dossier, vérifiez s'il relève vraiment d'un service transversal — ou si vous pouvez le traiter vous-même</p>
 </div>
@@ -544,6 +764,10 @@
     </div>
 
 </div>
+
+<footer class="page-footer">
+    Outils DAP &mdash; Communication
+</footer>
 
 <script>
 // ============================================================
@@ -609,13 +833,13 @@ const TREE = {
                 result: {
                     type: "autonome", title: "Essayez d'abord en autonomie",
                     body: `<p>Avant de transférer au service Corporate, vérifiez ces pistes :</p>
-                        <div class="tips-box"><h3>Checklist à parcourir</h3><ul>
+                        <details class="tips-box" open><summary>Checklist à parcourir</summary><ul>
                             <li>Chercher le client et son historique dans <strong>Brio</strong></li>
                             <li>Consulter les conditions de la compagnie actuelle (tarif, garanties)</li>
                             <li>Contacter l'inspecteur de la compagnie pour un avis technique</li>
                             <li>Vérifier s'il existe un produit standard adapté</li>
                             <li>Demander l'avis d'un collègue expérimenté de votre bureau</li>
-                        </ul></div>
+                        </ul></details>
                         <p style="margin-top:0.8rem;">Si après ces vérifications le dossier reste complexe, relancez le filtre.</p>`
                 }
             }
@@ -633,12 +857,12 @@ const TREE = {
                 label: "PME classique, pas d'activité particulière", icon: "🏪",
                 result: { type: "autonome", title: "Vous pouvez traiter ce dossier",
                     body: `<p>Pour une PME classique, les compagnies partenaires offrent des solutions adaptées.</p>
-                        <div class="tips-box"><h3>Pistes de traitement</h3><ul>
+                        <details class="tips-box" open><summary>Pistes de traitement</summary><ul>
                             <li>Utilisez les <strong>packs PME/Commerçant</strong> des compagnies partenaires</li>
                             <li>Comparez via les tarificateurs habituels (RC exploitation + incendie)</li>
                             <li>Contactez l'inspecteur de la compagnie pour valider l'activité</li>
                             <li>Demandez conseil à un collègue qui gère un dossier similaire</li>
-                        </ul></div>` }
+                        </ul></details>` }
             },
             { label: "Je ne suis pas sûr(e) de la complexité", icon: "🤔", next: "corporate_doute" }
         ]
@@ -655,10 +879,10 @@ const TREE = {
                 label: "Non, pas de spécificité particulière", icon: "👌",
                 result: { type: "autonome", title: "Vous pouvez traiter ce dossier",
                     body: `<p>Sans spécificité majeure, ce dossier peut être géré avec les outils classiques.</p>
-                        <div class="tips-box"><h3>Conseil</h3><ul>
+                        <details class="tips-box" open><summary>Conseil</summary><ul>
                             <li>Traitez-le comme un dossier standard via les compagnies partenaires</li>
                             <li>N'hésitez pas à appeler l'inspecteur si vous avez un doute technique</li>
-                        </ul></div>` }
+                        </ul></details>` }
             }
         ]
     },
@@ -672,12 +896,12 @@ const TREE = {
                 label: "Non, pas encore", icon: "⏳",
                 result: { type: "autonome", title: "Consultez d'abord la documentation",
                     body: `<p>Avant de transférer au service Patrimoine, explorez ces ressources :</p>
-                        <div class="tips-box"><h3>Checklist</h3><ul>
+                        <details class="tips-box" open><summary>Checklist</summary><ul>
                             <li>Consultez les <strong>fiches produit</strong> (AG, Vivium, Baloise, Ethias, Allianz)</li>
                             <li>Vérifiez les <strong>simulateurs en ligne</strong> des compagnies</li>
                             <li>Relisez les <strong>guides internes</strong> DAP sur les produits Vie</li>
                             <li>Demandez à un collègue ayant de l'expérience Vie/Patrimoine</li>
-                        </ul></div>` }
+                        </ul></details>` }
             }
         ]
     },
@@ -693,11 +917,11 @@ const TREE = {
                 label: "Épargne / Investissement branche 21 ou 23 classique", icon: "🏦",
                 result: { type: "autonome", title: "Vous pouvez traiter ce dossier",
                     body: `<p>Les produits d'épargne et investissement classiques font partie de la palette de base du gestionnaire.</p>
-                        <div class="tips-box"><h3>Pistes</h3><ul>
+                        <details class="tips-box" open><summary>Pistes</summary><ul>
                             <li>Utilisez les <strong>simulateurs des compagnies</strong></li>
                             <li>Vérifiez les <strong>avantages fiscaux</strong> applicables (épargne pension, PLCI, EIP…)</li>
                             <li>Contactez l'inspecteur Vie de la compagnie pour un cas précis</li>
-                        </ul></div>` }
+                        </ul></details>` }
             },
             { label: "Pension complémentaire dirigeant (EIP / PLCI)", icon: "👔", next: "vie_pension" }
         ]
@@ -715,11 +939,11 @@ const TREE = {
                 label: "Oui, je connais la règle et j'ai les éléments", icon: "✅",
                 result: { type: "autonome", title: "Vous avez les compétences pour ce dossier",
                     body: `<p>Si vous maîtrisez la règle des 80% et avez les éléments fiscaux, vous pouvez faire la simulation.</p>
-                        <div class="tips-box"><h3>Rappel</h3><ul>
+                        <details class="tips-box" open><summary>Rappel</summary><ul>
                             <li>Utilisez le <strong>simulateur EIP/PLCI</strong> de la compagnie</li>
                             <li>Vérifiez les plafonds légaux en vigueur</li>
                             <li>En cas de doute ponctuel, un appel rapide à la compagnie suffit souvent</li>
-                        </ul></div>` }
+                        </ul></details>` }
             }
         ]
     },
@@ -733,12 +957,12 @@ const TREE = {
                 label: "Non, je n'ai pas encore vérifié", icon: "⏳",
                 result: { type: "autonome", title: "Vérifiez d'abord les produits standards",
                     body: `<p>Beaucoup de structures non-marchandes peuvent être couvertes par des produits classiques.</p>
-                        <div class="tips-box"><h3>Checklist</h3><ul>
+                        <details class="tips-box" open><summary>Checklist</summary><ul>
                             <li>Vérifiez les <strong>packs ASBL</strong> des compagnies partenaires</li>
                             <li>Consultez les conditions pour <strong>administrations publiques</strong></li>
                             <li>Demandez à un collègue s'il a déjà traité un dossier similaire</li>
                             <li>Appelez l'inspecteur pour vérifier l'acceptation du risque</li>
-                        </ul></div>` }
+                        </ul></details>` }
             }
         ]
     },
@@ -754,11 +978,11 @@ const TREE = {
                 label: "Petite ASBL, comité de quartier, petit club sportif", icon: "⚽",
                 result: { type: "autonome", title: "Vous pouvez traiter ce dossier",
                     body: `<p>Les petites structures non-marchandes sont souvent couvrables avec les produits standards.</p>
-                        <div class="tips-box"><h3>Pistes</h3><ul>
+                        <details class="tips-box" open><summary>Pistes</summary><ul>
                             <li>Utilisez les <strong>packs ASBL</strong> des compagnies (Ethias, AG, Baloise…)</li>
                             <li>Les polices RC association + incendie local couvrent la majorité des cas</li>
                             <li>Vérifiez si la commune ne propose pas déjà une couverture</li>
-                        </ul></div>` }
+                        </ul></details>` }
             }
         ]
     },
@@ -771,12 +995,12 @@ const TREE = {
                 label: "Moins de 10 véhicules", icon: "🚙",
                 result: { type: "autonome", title: "Ce dossier est à gérer par votre bureau",
                     body: `<p>En dessous de 10 véhicules, le dossier doit être géré par le bureau qui a le lead.</p>
-                        <div class="tips-box"><h3>Traitement</h3><ul>
+                        <details class="tips-box" open><summary>Traitement</summary><ul>
                             <li>Traitez les véhicules avec les <strong>tarificateurs auto classiques</strong></li>
                             <li>Négociez une <strong>remise commerciale</strong> groupée avec la compagnie</li>
                             <li>Contactez l'inspecteur de la compagnie si besoin d'un avis technique</li>
                             <li>Regroupez les échéances pour faciliter la gestion</li>
-                        </ul></div>` }
+                        </ul></details>` }
             },
             {
                 label: "10 véhicules ou plus", icon: "🚛",
@@ -794,33 +1018,33 @@ const TREE = {
                 label: "Dossier technique complexe (risque spécial, exclusion, litige)", icon: "⚖️",
                 result: { type: "transversal", service: null, title: "Contactez votre responsable de bureau",
                     body: `<p>Pour un dossier atypique, commencez par en discuter avec votre responsable de bureau qui pourra vous orienter.</p>
-                        <div class="contact-box"><h3>Marche à suivre</h3><ul>
+                        <details class="contact-box" open><summary>Marche à suivre</summary><ul>
                             <li>Résumez le problème et ce que vous avez déjà tenté</li>
                             <li>Votre responsable déterminera le bon interlocuteur</li>
                             <li>Si le service transversal est confirmé, préparez un dossier complet</li>
-                        </ul></div>` }
+                        </ul></details>` }
             },
             {
                 label: "Question de procédure ou d'outil interne", icon: "📖",
                 result: { type: "autonome", title: "Ce n'est pas un dossier transversal",
                     body: `<p>Les questions de procédure ne relèvent pas des services transversaux.</p>
-                        <div class="tips-box"><h3>Ressources</h3><ul>
+                        <details class="tips-box" open><summary>Ressources</summary><ul>
                             <li>Consultez la <strong>documentation interne</strong></li>
                             <li>Posez la question dans le <strong>groupe Teams</strong></li>
                             <li>Contactez le <strong>helpdesk IT</strong></li>
                             <li>Parlez-en à votre <strong>responsable de bureau</strong></li>
-                        </ul></div>` }
+                        </ul></details>` }
             },
             {
                 label: "Client professionnel nécessitant un produit sur mesure", icon: "🎯",
                 result: { type: "transversal", service: null, title: "Transfert justifié — identifiez la cellule",
                     body: `<p>Un produit sur mesure nécessite l'intervention d'un service spécialisé.</p>
-                        <div class="contact-box"><h3>Quelle cellule contacter ?</h3><ul>
+                        <details class="contact-box" open><summary>Quelle cellule contacter ?</summary><ul>
                             <li><strong>DAP Corporate</strong> — RC, incendie, pertes d'exploitation</li>
                             <li><strong>DAP Patrimoine</strong> — épargne, investissement, pension, succession</li>
                             <li><strong>DAP Non-Marchand</strong> — ASBL, administration, école, hôpital</li>
                             <li><strong>DAP Flotte</strong> — parc de véhicules (10+)</li>
-                        </ul><p style="margin-top:0.5rem;">Identifiez la bonne cellule et relancez le filtre pour transmettre.</p></div>` }
+                        </ul><p style="margin-top:0.5rem;">Identifiez la bonne cellule et relancez le filtre pour transmettre.</p></details>` }
             }
         ]
     }
@@ -980,6 +1204,31 @@ function setupChecklistValidation() {
         });
     });
     updateSendButton();
+
+    // Wire preview summary updates on key field inputs
+    ['tf_gestionnaire', 'tf_bureau', 'tf_client', 'tf_email_gest', 'tf_resume'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updatePreviewSummary);
+    });
+}
+
+function updatePreviewSummary() {
+    const preview = document.getElementById('previewSummary');
+    if (!preview) return;
+
+    const gest = document.getElementById('tf_gestionnaire')?.value.trim() || '';
+    const bureau = document.getElementById('tf_bureau')?.value.trim() || '';
+    const client = document.getElementById('tf_client')?.value.trim() || '';
+
+    if (gest && bureau && client) {
+        preview.classList.remove('hidden');
+        document.getElementById('prev_gest').textContent = gest;
+        document.getElementById('prev_bureau').textContent = bureau;
+        document.getElementById('prev_client').textContent = client;
+        document.getElementById('prev_files').textContent = uploadedFiles.length;
+    } else {
+        preview.classList.add('hidden');
+    }
 }
 
 function updateSendButton() {
@@ -1000,7 +1249,13 @@ function buildTransmissionForm(serviceKey) {
     uploadedFiles = [];
 
     let html = `<div class="transmission-form" id="transmissionForm">
-        <h3>${escaladeMode ? '🆘 Demande d\'aide — ' : '📨 '}Transmettre le dossier à ${contact.name}</h3>`;
+        <h3>${escaladeMode ? '🆘 Demande d\'aide — ' : '📨 '}Transmettre le dossier à ${contact.name}</h3>
+        <div class="form-stepper">
+            <div class="stepper-step"><div class="stepper-circle">1</div><div class="stepper-label">Prérequis</div></div>
+            <div class="stepper-step"><div class="stepper-circle">2</div><div class="stepper-label">Informations</div></div>
+            <div class="stepper-step"><div class="stepper-circle">3</div><div class="stepper-label">Détails</div></div>
+            <div class="stepper-step"><div class="stepper-circle">4</div><div class="stepper-label">Envoi</div></div>
+        </div>`;
 
     // Note d'escalade si passage autonome → transversal
     if (escaladeMode) {
@@ -1112,6 +1367,16 @@ function buildTransmissionForm(serviceKey) {
             <div class="file-list" id="fileList"></div>
         </div>`;
 
+    // Preview summary
+    html += `<div class="preview-summary hidden" id="previewSummary">
+            <h4>&#128065; Apercu avant envoi</h4>
+            <div class="preview-row"><span class="preview-label">Gestionnaire</span><span class="preview-value" id="prev_gest">&mdash;</span></div>
+            <div class="preview-row"><span class="preview-label">Bureau</span><span class="preview-value" id="prev_bureau">&mdash;</span></div>
+            <div class="preview-row"><span class="preview-label">Client</span><span class="preview-value" id="prev_client">&mdash;</span></div>
+            <div class="preview-row"><span class="preview-label">Service</span><span class="preview-value" id="prev_service">${contact.service}</span></div>
+            <div class="preview-row"><span class="preview-label">Fichiers joints</span><span class="preview-value" id="prev_files">0</span></div>
+        </div>`;
+
     // Send button
     html += `<button class="btn-send" id="btnSend" onclick="sendTransmission('${serviceKey}')">
             Envoyer le dossier à ${contact.name}
@@ -1169,6 +1434,7 @@ function handleFiles(fileList) {
 function renderFileList() {
     const list = document.getElementById('fileList');
     if (!list) return;
+    updatePreviewSummary();
 
     if (uploadedFiles.length === 0) {
         list.innerHTML = '';
@@ -1284,7 +1550,9 @@ async function sendTransmission(serviceKey) {
         });
 
         btn.style.display = 'none';
-        document.getElementById('sendSuccess').classList.remove('hidden');
+        const successEl = document.getElementById('sendSuccess');
+        successEl.classList.remove('hidden');
+        successEl.classList.add('celebrate');
 
     } catch (err) {
         btn.classList.remove('sending');
