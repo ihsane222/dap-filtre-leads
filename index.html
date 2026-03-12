@@ -550,10 +550,10 @@
 // CONTACTS PAR SERVICE
 // ============================================================
 const CONTACTS = {
-    corporate: { name: "Thomas", email: "ife@dap.be", service: "Corporate" },
-    vie:       { name: "Romain", email: "ife@dap.be", service: "Vie / Patrimoine" },
-    nonmarchand: { name: "Sophie", email: "ife@dap.be", service: "Non-Marchand" },
-    flotte:    { name: "Kevin",  email: "ife@dap.be",  service: "Flotte" }
+    corporate:   { name: "DAP Corporate",   email: "ife@dap.be",              service: "Corporate" },
+    vie:         { name: "DAP Patrimoine",   email: "contact@dappatrimoine.be", service: "Vie / Patrimoine" },
+    nonmarchand: { name: "DAP Non-Marchand", email: "ife@dap.be",              service: "Non-Marchand" },
+    flotte:      { name: "DAP Flotte",       email: "ife@dap.be",              service: "Flotte" }
 };
 
 // Questions spécifiques par service (affichées dans le formulaire de transmission)
@@ -594,7 +594,7 @@ const TREE = {
             { label: "Corporate / Entreprise", icon: "🏢", desc: "Dossier entreprise, RC exploitation, incendie industriel…", next: "corporate_check" },
             { label: "Vie / Patrimoine", icon: "💰", desc: "Épargne, investissement, pension, succession…", next: "vie_check" },
             { label: "Non-Marchand", icon: "🤝", desc: "ASBL, écoles, administrations publiques, hôpitaux…", next: "nonmarchand_check" },
-            { label: "Flotte véhicules", icon: "🚗", desc: "Parc automobile, flotte entreprise (>= 5 véhicules)…", next: "flotte_check" },
+            { label: "Flotte véhicules", icon: "🚗", desc: "Parc automobile, flotte entreprise (10 véhicules ou plus)…", next: "flotte_check" },
             { label: "Autre / Je ne sais pas", icon: "❓", desc: "Je ne sais pas dans quelle catégorie classer ce dossier", next: "autre_triage" }
         ]
     },
@@ -765,44 +765,23 @@ const TREE = {
 
     // ─── FLOTTE ───
     flotte_check: {
-        question: "Combien de véhicules compte la flotte ?",
+        question: "Combien de véhicules compte le dossier ?",
         options: [
             {
-                label: "Moins de 5 véhicules", icon: "🚙",
-                result: { type: "autonome", title: "Ce n'est pas un dossier Flotte",
-                    body: `<p>En dessous de 5 véhicules, il ne s'agit pas d'une flotte au sens technique.</p>
+                label: "Moins de 10 véhicules", icon: "🚙",
+                result: { type: "autonome", title: "Ce dossier est à gérer par votre bureau",
+                    body: `<p>En dessous de 10 véhicules, le dossier doit être géré par le bureau qui a le lead.</p>
                         <div class="tips-box"><h3>Traitement</h3><ul>
-                            <li>Traitez chaque véhicule individuellement avec les tarificateurs auto classiques</li>
+                            <li>Traitez les véhicules avec les <strong>tarificateurs auto classiques</strong></li>
                             <li>Négociez une <strong>remise commerciale</strong> groupée avec la compagnie</li>
+                            <li>Contactez l'inspecteur de la compagnie si besoin d'un avis technique</li>
                             <li>Regroupez les échéances pour faciliter la gestion</li>
                         </ul></div>` }
             },
-            { label: "5 à 15 véhicules", icon: "🚐", next: "flotte_medium" },
             {
-                label: "Plus de 15 véhicules", icon: "🚛",
+                label: "10 véhicules ou plus", icon: "🚛",
                 result: { type: "transversal", service: "flotte", title: "Transfert Flotte justifié",
-                    body: `<p>Une flotte de cette taille nécessite une gestion spécialisée et des conditions négociées.</p>` }
-            }
-        ]
-    },
-    flotte_medium: {
-        question: "Avez-vous déjà contacté la compagnie pour une offre flotte ?",
-        options: [
-            {
-                label: "Oui, mais la compagnie ne propose pas de solution adaptée", icon: "❌",
-                result: { type: "transversal", service: "flotte", title: "Transfert Flotte recommandé",
-                    body: `<p>Si les compagnies classiques ne couvrent pas le besoin, le service Flotte a accès à des solutions dédiées.</p>` }
-            },
-            {
-                label: "Non, pas encore", icon: "⏳",
-                result: { type: "autonome", title: "Contactez d'abord les compagnies",
-                    body: `<p>Pour 5 à 15 véhicules, plusieurs compagnies proposent des contrats flotte directement.</p>
-                        <div class="tips-box"><h3>Actions à entreprendre</h3><ul>
-                            <li>Contactez les inspecteurs de <strong>2-3 compagnies partenaires</strong></li>
-                            <li>Demandez une <strong>offre flotte</strong> avec la liste complète des véhicules</li>
-                            <li>Comparez les conditions (franchise, bonus-malus flotte, assistance)</li>
-                            <li>Si aucune offre ne convient, relancez le filtre</li>
-                        </ul></div>` }
+                    body: `<p>À partir de 10 véhicules, le dossier doit être géré par le département Flotte qui dispose de solutions et conditions dédiées.</p>` }
             }
         ]
     },
@@ -837,10 +816,10 @@ const TREE = {
                 result: { type: "transversal", service: null, title: "Transfert justifié — identifiez la cellule",
                     body: `<p>Un produit sur mesure nécessite l'intervention d'un service spécialisé.</p>
                         <div class="contact-box"><h3>Quelle cellule contacter ?</h3><ul>
-                            <li><strong>Corporate (Thomas)</strong> — RC, incendie, pertes d'exploitation</li>
-                            <li><strong>Patrimoine (Romain)</strong> — épargne, investissement, pension</li>
-                            <li><strong>Non-Marchand (Sophie)</strong> — ASBL, administration, école, hôpital</li>
-                            <li><strong>Flotte (Kevin)</strong> — parc de véhicules</li>
+                            <li><strong>DAP Corporate</strong> — RC, incendie, pertes d'exploitation</li>
+                            <li><strong>DAP Patrimoine</strong> — épargne, investissement, pension, succession</li>
+                            <li><strong>DAP Non-Marchand</strong> — ASBL, administration, école, hôpital</li>
+                            <li><strong>DAP Flotte</strong> — parc de véhicules (10+)</li>
                         </ul><p style="margin-top:0.5rem;">Identifiez la bonne cellule et relancez le filtre pour transmettre.</p></div>` }
             }
         ]
